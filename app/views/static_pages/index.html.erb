@@ -18,6 +18,7 @@
         var checkedStatus = task.done ? "checked" : "";
         var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' +
         checkedStatus +
+        " data-id='" + task.id + "'" +
         '><label>' +
          task.title +
          '</label></div></li>';
@@ -25,6 +26,19 @@
       });
       var ulTodos = $('.todo-list');
       ulTodos.html(htmlString);
+
+      $('.toggle').change(function(e) {
+        var itemId = $(e.target).data("id");
+        var doneValue = Boolean($(e.target).is(':checked'));
+        
+        $.post("/tasks/" + itemId, {
+          _method: "PUT",
+          task: {
+            done: doneValue
+          }
+        });
+      });
+
     });
   });
 </script>
